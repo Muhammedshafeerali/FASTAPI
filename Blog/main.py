@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Depends,status,Response
+from fastapi import FastAPI,Depends,status,Response,HTTPException
 from . import models,shema
 from sqlalchemy.orm import session
 
@@ -24,9 +24,13 @@ def Blog(db:session=Depends(get_db)):
 
 
 @app.get("/blog/{id}")
-def get_blog(id,db:session=Depends(get_db)):
+def get_blog(id,response:Response,db:session=Depends(get_db)):
     blog=db.query(models.Blog).filter(models.Blog.id==id).first()
-    return blog
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Blog with id {id} is not available")
+        # response.status_code=status.HTTP_404_NOT_FOUND
+        # return {"message":f"Blog wiht id {id} is not available"}
+    return blog  
 
 
 @app.post("/blog",status_code=status.HTTP_201_CREATED)
