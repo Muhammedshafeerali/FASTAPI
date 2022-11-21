@@ -3,7 +3,7 @@ from . import models,shema
 from sqlalchemy.orm import session
 
 from .database import engine,SessionLocal
-
+from typing import List
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -16,14 +16,14 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/blog")
+@app.get("/blog",response_model=List[shema.ShowBlog])
 def Blog(db:session=Depends(get_db)):
     blogs=db.query(models.Blog).all()
 
     return blogs
 
 
-@app.get("/blog/{id}")
+@app.get("/blog/{id}",response_model=shema.ShowBlog)
 def get_blog(id,response:Response,db:session=Depends(get_db)):
     blog=db.query(models.Blog).filter(models.Blog.id==id).first()
     if not blog:
