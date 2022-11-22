@@ -1,4 +1,6 @@
 fastapi
 uvicorn
 sqlalchemy
-passlib
+passlib  
+python-jose
+
