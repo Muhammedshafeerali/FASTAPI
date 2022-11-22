@@ -2,6 +2,7 @@ from fastapi import APIRouter,Depends
 from .. import shema,models,database
 from sqlalchemy.orm import session
 from ..repository import Authenticate
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 router=APIRouter(
@@ -10,5 +11,5 @@ router=APIRouter(
 )
 
 @router.post("/login")
-def login(request:shema.Login,db:session=Depends(database.get_db)):
+def login(request:OAuth2PasswordRequestForm = Depends(),db:session=Depends(database.get_db)):
     return Authenticate.Login(request,db)

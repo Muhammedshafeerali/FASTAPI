@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
-from typing import List
+from typing import List,Union,Optional
 
 class Blog(BaseModel):
     title:str
@@ -41,5 +40,8 @@ class ShowBlog(BaseModel):
 
 
 class Login(BaseModel):
-    username:str
+    email:str
     password:str
+
+class TokenData(BaseModel):
+    email: Union[str, None] = None

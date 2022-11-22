@@ -1,8 +1,9 @@
 from fastapi import APIRouter,Depends,HTTPException,status,Response
 from typing import List
 from sqlalchemy.orm import session
-from  .. import shema,models,database
+from  .. import shema,models,database,oauth2
 from ..repository import Blog,User
+
 
 router=APIRouter(
     prefix="/blog",
@@ -12,7 +13,7 @@ router=APIRouter(
 get_db=database.get_db
 
 @router.get("",response_model=List[shema.ShowBlog])
-def blog(db:session=Depends(get_db)):
+def blog(db:session=Depends(get_db),current_user:shema.relationUser=Depends(oauth2.get_current_user)):
     return Blog.get_all(db)
    
 
